@@ -1,13 +1,42 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
-from .models import Buyer, Market
-from .serializer import BuyerSerializer
+from .models import Buyer, Market, Commodity, Quality, Tag, Feedback, Comment, Post
+from .serializer import BuyerSerializer, MarketSerializer, CommoditySerializer, QualitySerialzer, TagSerialzer, CommentSerialzer, FeedbackSerialzer, PostSerialzer
 # Create your views here.
 
 class BuyerView(ModelViewSet):
     queryset = Buyer.objects.all()
     serializer_class = BuyerSerializer
+
+class MarketView(ModelViewSet):
+    queryset = Market.objects.all()
+    serializer_class = MarketSerializer
+
+class CommodityView(ModelViewSet):
+    queryset = Commodity.objects.all()
+    serializer_class = CommoditySerializer
+
+class QualityView(ModelViewSet):
+    queryset = Quality.objects.all()
+    serializer_class = QualitySerialzer
+
+class TagView(ModelViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerialzer
+
+class CommentView(ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerialzer
+
+class FeedbackView(ModelViewSet):
+    queryset = Feedback.objects.all()
+    serializer_class = FeedbackSerialzer
+
+class PostView(ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerialzer
+
 
 # class BuyerView(APIView):
     

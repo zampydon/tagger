@@ -9,6 +9,9 @@ class Market(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self) -> str:
+        return self.market_name
+
 class Buyer(models.Model):
     buyer_id = models.UUIDField(auto_created=True)
     buyer_code = models.TextField(primary_key=True)
@@ -18,6 +21,9 @@ class Buyer(models.Model):
     market_id = models.ForeignKey('Market', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return f"{self.buyer_code} + {self.shop_name}"
 
 class Commodity(models.Model):
     commodity_id = models.AutoField(primary_key=True)

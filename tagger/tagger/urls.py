@@ -19,5 +19,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('buyer/', include('tag_feedback_input.urls'))
+    path('app/', include('tag_feedback_input.urls')),
+    
 ]
