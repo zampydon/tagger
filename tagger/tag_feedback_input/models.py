@@ -1,3 +1,4 @@
+from typing import Any
 from django.db import models
 import datetime
 # Create your models here.
@@ -13,7 +14,6 @@ class Market(models.Model):
         return self.market_name
 
 class Buyer(models.Model):
-    buyer_id = models.UUIDField(auto_created=True)
     buyer_code = models.TextField(primary_key=True)
     shop_name = models.TextField(unique=True, max_length=256)
     shop_number = models.TextField(unique=True)
@@ -30,6 +30,9 @@ class Commodity(models.Model):
     commodity_name = models.TextField(unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self) -> str:
+        return self.commodity_name
 
 class Quality(models.Model):
     quality_id = models.AutoField(primary_key=True)
@@ -40,11 +43,14 @@ class Quality(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self) -> str:
+        return f"{self.commodity_id} + {self.quality_name} + {self.quality_code}"
+
 class Feedback(models.Model):
     feedback_id = models.AutoField(primary_key=True)
     feedback_content = models.TextField(db_index=True)
     feedback_type = models.TextField(choices=[(e,e.capitalize()) for e in ('visit','call')])
-    buyer_id = models.ForeignKey('Buyer', on_delete=models.CASCADE)
+    post_id = models.ForeignKey('Post', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -54,19 +60,23 @@ class Tag(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self) -> str:
+        return f"{self.tag_name}"
+
 class Comment(models.Model):
     comment_id = models.AutoField(primary_key=True)
     comment_name = models.TextField()
+    post_id = models.ManyToManyField('Post')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
 class Post(models.Model):
     post_id = models.AutoField(primary_key=True)
     buyer_id = models.ForeignKey('Buyer',on_delete=models.CASCADE)
-    feedback_id = models.ForeignKey('Feedback',on_delete=models.CASCADE)
+    # feedback_id = models.ForeignKey('Feedback',on_delete=models.CASCADE)
     quality_id = models.ForeignKey('Quality', on_delete=models.CASCADE)
     tag_id = models.ManyToManyField('Tag')
-    comment_id = models.ManyToManyField('Comment')
+    # comment_id = models.ManyToManyField('Comment')
     packaging_requirement_weight = models.FloatField(choices = [(e,e) for e in (50, 40, 30, 1, .500, .100)], default=30)
     customer_type = models.TextField(choices=[(e,e.capitalize()) for e in ('Wholesaler/Trader', 'Retail', 'Restaurant', 'Hotel', 'Caterer', 'Exporter', 'Manufacturer', 'Broker', 'Stockist', 'FPO')], default='Wholesaler/Trader')
     next_action = models.TextField(blank=False, null=True)

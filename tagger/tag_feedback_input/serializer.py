@@ -28,7 +28,7 @@ class BuyerSerializer(serializers.ModelSerializer):
         model = Buyer
         fields = '__all__'
         extra_fields = ['market']
-
+        
         def get_field_names(self, declared_fields, info):
             expanded_fields = super(BuyerSerializer, self).get_field_names(declared_fields, info)
 
@@ -80,31 +80,32 @@ class CommentSerialzer(serializers.ModelSerializer):
         fields = '__all__'
 
 class FeedbackSerialzer(serializers.ModelSerializer):
-    buyer = serializers.StringRelatedField(read_only = True, many=True)
+    # buyer = serializers.StringRelatedField(read_only = True, many=True)
     class Meta:
         model = Feedback
-        fields = '__all__'
-        extra_fields = ['buyer']
+        exclude = ('post_id',)
+        # extra_fields = ['buyer']
 
-        def get_field_names(self, declared_fields, info):
-            expanded_fields = super(FeedbackSerialzer, self).get_field_names(declared_fields, info)
+        # def get_field_names(self, declared_fields, info):
+        #     expanded_fields = super(FeedbackSerialzer, self).get_field_names(declared_fields, info)
 
-            if getattr(self.Meta, 'extra_fields', None):
-                return expanded_fields + self.Meta.extra_fields
-            else:
-                return expanded_fields
+        #     if getattr(self.Meta, 'extra_fields', None):
+        #         return expanded_fields + self.Meta.extra_fields
+        #     else:
+        #         return expanded_fields
 
 class PostSerialzer(serializers.ModelSerializer):
+    comment = CommentSerialzer(required=False, source="comment_set",many=True)
     buyer = serializers.StringRelatedField(read_only=True)
-    feedback = serializers.StringRelatedField()
-    quality = serializers.StringRelatedField()
-    tag = serializers.StringRelatedField(many=True)
-    comment = serializers.StringRelatedField(many=True)
+    feedback = FeedbackSerialzer(required=False, source="feedback_set")
+    quality = serializers.StringRelatedField(read_only=True)
+    # tag = serializers.StringRelatedField(many=True, read_only=True)
+    # comment = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = Post
         fields = '__all__'
-        extra_fields = ['buyer','feedback', 'quality', 'tag', 'comment']
+        extra_fields = ['buyer','feedback', 'quality', 'comment']
 
         def get_field_names(self, declared_fields, info):
             expanded_fields = super(PostSerialzer, self).get_field_names(declared_fields, info)
@@ -113,3 +114,16 @@ class PostSerialzer(serializers.ModelSerializer):
                 return expanded_fields + self.Meta.extra_fields
             else:
                 return expanded_fields    
+    
+    def create(self, validated_data):
+        comments = validated_data.pop('comment')
+        feedback = validated_data.pop('feedback')
+
+        post = Post.objects.create(validated_data)
+
+        for comment in comments:
+            Comment.objects.create(post_id = post, **comment)
+
+        Feedback.objects.create(post_id=post, **feedback) 
+        return post 
+
