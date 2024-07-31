@@ -18,6 +18,7 @@ class Buyer(models.Model):
     shop_name = models.TextField(unique=True, max_length=256)
     shop_number = models.TextField(unique=True)
     owner_name = models.TextField(max_length=256)
+    buyer_number = models.IntegerField(unique=True)
     market_id = models.ForeignKey('Market', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

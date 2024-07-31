@@ -1,0 +1,11 @@
+form {
+    display: flex;
+    flex-direction: column;
+    background: #d2dce100;
+    padding: 4vh 3vh;
+}
+
+input, select {
+    height:50px;
+    font-size:14pt;
+}
