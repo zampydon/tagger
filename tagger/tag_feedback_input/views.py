@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ViewSet
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Buyer, Market, Commodity, Quality, Tag, Feedback, Comment, Post
-from .serializer import BuyerSerializer, MarketSerializer, CommoditySerializer, QualitySerialzer, TagSerialzer, CommentSerialzer, FeedbackSerialzer, PostSerialzer
+from .serializer import BuyerSerializer, MarketSerializer, CommoditySerializer, QualitySerialzer, TagSerialzer, CommentSerialzer, FeedbackSerialzer, PostSerialzer, PostListSerializer
 # Create your views here.
 
 class BuyerView(ModelViewSet):
@@ -20,6 +21,7 @@ class CommodityView(ModelViewSet):
 class QualityView(ModelViewSet):
     queryset = Quality.objects.all()
     serializer_class = QualitySerialzer
+    
 
 class TagView(ModelViewSet):
     queryset = Tag.objects.all()
@@ -36,6 +38,21 @@ class FeedbackView(ModelViewSet):
 class PostView(ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerialzer
+
+    def get_serializer(self, *args, **kwargs):
+        # checking for post only so that 'get' won't be affected
+        if self.request.method.lower() == 'post':
+            data = kwargs.get('data')
+            kwargs['many'] = isinstance(data, list)
+        return super(PostView, self).get_serializer(*args, **kwargs)
+
+class FetchQualityView(ViewSet):
+
+    def list(self, request, commodity_id):
+
+        queryset = Quality.objects.filter(commodity_id=commodity_id)
+        serialzer = QualitySerialzer(queryset, many=True)
+        return Response(serialzer.data)
 
 
 # class BuyerView(APIView):

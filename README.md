@@ -1,0 +1,2 @@
+- https://stackoverflow.com/questions/45532405/how-to-access-serializer-data-on-listserializer-parent-class-in-drf 
+- https://stackoverflow.com/questions/27869841/how-can-i-put-post-json-data-to-a-listserializer/27871396#27871396
