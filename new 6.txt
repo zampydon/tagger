@@ -1,0 +1,17 @@
+https://www.cdrf.co/
+https://www.reddit.com/r/Eminem/comments/9d9az9/my_god_he_really_is_as_cold_as_ice_quick_lyric/?rdt=34024
+https://search.brave.com/search?q=hhhh&source=web
+https://medium.com/@sydney.idundun/understanding-views-in-django-rest-framework-d78ca8042f04
+
+https://stackoverflow.com/questions/68161650/how-to-set-value-to-foreign-key-filed-before-perform-create-in-django-rest-frame
+
+https://stackoverflow.com/questions/68572656/django-missing-1-required-positional-argument-id
+https://stackoverflow.com/questions/38245414/django-rest-framework-how-to-include-all-fields-and-a-related-field-in-mo/41063577#41063577
+
+https://stackoverflow.com/questions/68161650/how-to-set-value-to-foreign-key-filed-before-perform-create-in-django-rest-frame
+
+https://www.django-rest-framework.org/api-guide/serializers/
+https://www.django-rest-framework.org/api-guide/viewsets/#modelviewset
+https://www.django-rest-framework.org/api-guide/relations/
+https://www.django-rest-framework.org/api-guide/validators/
+https://www.scaler.com/topics/django/data-validation-using-drf-in-django/

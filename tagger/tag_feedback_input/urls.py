@@ -1,4 +1,4 @@
-from .views import BuyerView, MarketView, CommodityView, QualityView, TagView, CommentView, FeedbackView, PostView, FetchQualityView
+from .views import BuyerView, MarketView, CommodityView, QualityView, TagView, CommentView, FeedbackView, PostView
 from rest_framework.routers import DefaultRouter
 from django.urls import path
 # urlpatterns = [
@@ -23,5 +23,5 @@ router.register('feedback', FeedbackView, basename='feedback')
 urlpatterns += router.urls
 router.register('post', PostView, basename='post')
 urlpatterns += router.urls
-router.register(r'ajax-quality/<commodity_id>', FetchQualityView, basename="MyQuerySet")
-urlpatterns += router.urls
+# router.register(r'ajax-quality/<commodity_id>', FetchQualityView, basename="MyQuerySet")
+# urlpatterns += router.urls

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.views import APIView
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from .models import Buyer, Market, Commodity, Quality, Tag, Feedback, Comment, Post
 from .serializer import BuyerSerializer, MarketSerializer, CommoditySerializer, QualitySerialzer, TagSerialzer, CommentSerialzer, FeedbackSerialzer, PostSerialzer, PostListSerializer
@@ -21,6 +22,9 @@ class CommodityView(ModelViewSet):
 class QualityView(ModelViewSet):
     queryset = Quality.objects.all()
     serializer_class = QualitySerialzer
+    
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['commodity_id']
     
 
 class TagView(ModelViewSet):
@@ -46,13 +50,13 @@ class PostView(ModelViewSet):
             kwargs['many'] = isinstance(data, list)
         return super(PostView, self).get_serializer(*args, **kwargs)
 
-class FetchQualityView(ViewSet):
+# class FetchQualityView(ViewSet):
 
-    def list(self, request, commodity_id):
+#     def list(self, request, commodity_id):
 
-        queryset = Quality.objects.filter(commodity_id=commodity_id)
-        serialzer = QualitySerialzer(queryset, many=True)
-        return Response(serialzer.data)
+#         queryset = Quality.objects.filter(commodity_id=commodity_id)
+#         serialzer = QualitySerialzer(queryset, many=True)
+#         return Response(serialzer.data)
 
 
 # class BuyerView(APIView):

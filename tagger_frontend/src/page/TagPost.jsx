@@ -5,7 +5,8 @@ export default function TagPost() {
     const [commodities, setCommodities] = useState([])
     const [commodity, setCommodity] = useState(0)
     const [qualities, setQualities] = useState([])
-    
+    const [tags, setTags] = useState([])
+
     const getBuyer = async () => {
         let data = await fetch('http://localhost:8000/app/buyer/')
         let tempBuyer = await data.json()
@@ -27,7 +28,8 @@ export default function TagPost() {
     }
 
     const getQuality = async () => {
-        let data = await fetch('http://localhost:8000/app/ajax-quality/' + commodity) 
+        let uri = `http://localhost:8000/app/quality?commodity_id=${commodity}`
+        let data = await fetch(uri) 
             
         let tempQuality = await data.json()
         let items = []
@@ -36,13 +38,52 @@ export default function TagPost() {
         }
         setQualities([...items]) 
     }
+    const getTags = async () => {
+        let uri = `http://localhost:8000/app/tag`
+        let data = await fetch(uri)
+
+        let tempTags = await data.json()
+        let items = []
+        for (let temp of tempTags) {
+            items.push(temp)
+        }
+        setTags([...items])
+    }
 
     const handleSubmit = async (e) => {
-        console.log(e.target)
+        e.preventDefault()
+        // let formObject = e.target
+        let form = new FormData(e.target)
+        // let data = {"comment":[{"comment_name":formObject.comment_name.value}],
+        //             "feedback":{
+        //                 "feedback_content":formObject.feedback_content.value,
+        //                 "feedback_type":formObject.feedback_type.value
+        //             },
+        //             "packaging_requirement_weight":formObject.packaging_requirement_weight.value,
+        //             "customer_type":formObject.customer_type.value,
+        //             "buyer_id":formObject.buyer_id.value,
+        //             "quality_id":formObject.quality_id.value,
+        //             "next_action":formObject.next_action.value,
+        //             "tag_id":[formObject.tag_id.value]
+        //         }
+        
+            // console.log(data)
+            let arr = [...form]
+            console.log(arr[6][1] + arr[7][1])
+            // let res = await fetch('http://localhost:8000/app/post/',{method:"POST",
+            //     headers:{"Content-Type":"application/json"},
+            //     body:JSON.stringify(data)
+            // })
+            // if (res.ok) {
+            //     alert(res.json())
+            // }
+
+            document.querySelector('#post-form').reset()
+
     }
     return (
         <>  
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} id='post-form'>
                 <select name="buyer_id" onFocus={getBuyer}>
                     {buyers.map((value,index) => {
                         return <option value={value.buyer_code} key={value.buyer_code}>{value.shop_name}</option>
@@ -72,14 +113,25 @@ export default function TagPost() {
                     })}
                 </select>
                 <select name='quality_id' onFocus={getQuality}>
-                    {/* Dyanmic Generate */}
+                    {qualities.map((value, index) => {
+                        return <option key={value.quality_id} value={value.quality_id}>{value.quality_code}</option>
+                    })}
                 </select>
-                <select name='tag_id' multiple>
-                    {/* Dyanmic Genreate */}
+                <select name='tag_id' multiple={true} onFocus={getTags}>
+                    {tags.map((value, index) => {
+                        return <option key={value.tag_id} value={value.tag_id}>{value.tag_name}</option>
+                    })}
 
                 </select>
                 <input name='comment_name' placeholder='Enter Comment Regarding the Quality'/>
-                <input name='packaging_requirement_weight' placeholder='Packaging Requirement Weight'/>
+                <select name='packaging_requirement_weight' defaultValue={30}>
+                    <option value={50}>50</option>
+                    <option value={40}>40</option>
+                    <option value={30}>30</option>
+                    <option value={.5}>.5</option>
+                    <option value={.1}>.1</option>
+                </select>
+                <input name='next_action' placeholder='Enter next action' />
                 <input type='submit' value={"Submit"} />
             </form>
         </>
