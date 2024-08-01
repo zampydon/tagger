@@ -3,8 +3,8 @@ from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.views import APIView
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
-from .models import Buyer, Market, Commodity, Quality, Tag, Feedback, Comment, Post
-from .serializer import BuyerSerializer, MarketSerializer, CommoditySerializer, QualitySerialzer, TagSerialzer, CommentSerialzer, FeedbackSerialzer, PostSerialzer, PostListSerializer
+from .models import Buyer, Market, Commodity, Quality, Tag, Feedback, Comment, Post, BuyerInterest, InterestIssue
+from .serializer import BuyerSerializer, MarketSerializer, CommoditySerializer, QualitySerialzer, TagSerialzer, CommentSerialzer, FeedbackSerialzer, PostSerialzer, PostListSerializer, BuyerInterestSerializer, InterestIssueSerializer, TimelineSerializer
 # Create your views here.
 
 class BuyerView(ModelViewSet):
@@ -50,6 +50,11 @@ class PostView(ModelViewSet):
             kwargs['many'] = isinstance(data, list)
         return super(PostView, self).get_serializer(*args, **kwargs)
 
+class InterestIssueView(ModelViewSet):
+    queryset = InterestIssue.objects.all()
+    serializer_class = InterestIssueSerializer
+
+
 # class FetchQualityView(ViewSet):
 
 #     def list(self, request, commodity_id):
@@ -57,6 +62,21 @@ class PostView(ModelViewSet):
 #         queryset = Quality.objects.filter(commodity_id=commodity_id)
 #         serialzer = QualitySerialzer(queryset, many=True)
 #         return Response(serialzer.data)
+
+class TimelineView(ViewSet):
+    
+    def list(self, request):
+        id = request.query_params['buyer_id']
+        post = Post.objects.filter(buyer_id=id)
+        buyer_name_ = Buyer.objects.get(buyer_code=id)
+        buyer_name = buyer_name_.shop_name
+        feedback = Feedback.objects.filter()
+
+        tags = post.get('tags')
+
+        szr = TimelineSerializer(shop_name=buyer_name, feedback=feedback, tag_name=tags)
+        return Response(szr.data)
+
 
 
 # class BuyerView(APIView):
