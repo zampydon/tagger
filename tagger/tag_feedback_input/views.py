@@ -12,7 +12,7 @@ class BuyerView(ModelViewSet):
     serializer_class = BuyerSerializer
 
 class MarketView(ModelViewSet):
-    queryset = Market.objects.all()
+    queryset = Market.objects.all().order_by('market_name')
     serializer_class = MarketSerializer
 
 class CommodityView(ModelViewSet):
@@ -66,18 +66,30 @@ class InterestIssueView(ModelViewSet):
 class TimelineView(ViewSet):
     
     def list(self, request):
-        id = request.query_params['buyer_id']
-        post = Post.objects.filter(buyer_id=id)
+        id = self.request.query_params['buyer_id']
+        posts = Post.objects.filter(buyer_id=id)
         buyer_name_ = Buyer.objects.get(buyer_code=id)
         buyer_name = buyer_name_.shop_name
-        feedback = Feedback.objects.filter()
+        feedback_id = []
+        for post in posts:
+            feedbacks = Feedback.objects.filter(post_id_id = post.post_id)
+            feedback_id.append(feedbacks)
+        # feedback_serial = FeedbackSerialzer(feedback, many=True)
+        
+        tags = posts.values()
+        # tags_serial = TagSerialzer(tags, many=True)
+        # timeline_object = TimelineClass(shop_name=buyer_name, feedback=feedback_serial, tag_name=tags_serial)
 
-        tags = post.get('tags')
-
-        szr = TimelineSerializer(shop_name=buyer_name, feedback=feedback, tag_name=tags)
+        # szr = TimelineSerializer(instance={"shop_name":buyer_name, "feedback":feedback, "tag_name":tags})
+        szr = TimelineSerializer(instance={"shop_name":buyer_name, "feedback":feedback_id, "tag_name":tags})
         return Response(szr.data)
 
 
+# class TimelineClass:
+#     def __init__(self, shop_name, feedback, tag_name=[]):
+#         self.shop_name = shop_name
+#         self.feedback = feedback
+#         self.tag_name = tag_name
 
 # class BuyerView(APIView):
     

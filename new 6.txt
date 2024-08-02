@@ -15,3 +15,6 @@ https://www.django-rest-framework.org/api-guide/viewsets/#modelviewset
 https://www.django-rest-framework.org/api-guide/relations/
 https://www.django-rest-framework.org/api-guide/validators/
 https://www.scaler.com/topics/django/data-validation-using-drf-in-django/
+https://stackoverflow.com/questions/10383044/fuzzy-string-comparison
+https://www.datacamp.com/tutorial/fuzzy-string-python
+https://builtin.com/data-science/fuzzy-matching-python

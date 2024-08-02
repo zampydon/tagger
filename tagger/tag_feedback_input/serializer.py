@@ -85,6 +85,7 @@ class FeedbackSerialzer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
         exclude = ('post_id',)
+        
         # extra_fields = ['buyer']
 
         # def get_field_names(self, declared_fields, info):
@@ -217,8 +218,11 @@ class PostSerialzer(serializers.ModelSerializer):
 
 class TimelineSerializer(serializers.Serializer):
     shop_name = serializers.CharField(required=False)
-    feedback = serializers.CharField(required=False)
-    tag_name = serializers.ListField(child=serializers.CharField())
+    feedback = FeedbackSerialzer(many=True)
+    # feedback_id = serializers.ListField(child=serializers.IntegerField())
+    tag_name = TagSerialzer(many=True)
+
+
 
 # class PostListSerializer(serializers.ListSerializer):
 #     post = PostSerialzer(many=True)
