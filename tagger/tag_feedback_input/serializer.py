@@ -70,6 +70,7 @@ class QualitySerialzer(serializers.ModelSerializer):
                 return expanded_fields
 
 class TagSerialzer(serializers.ModelSerializer):
+    tag_name = serializers.CharField(required=False)
     class Meta:
         model = Tag
         fields = '__all__'
@@ -82,6 +83,8 @@ class CommentSerialzer(serializers.ModelSerializer):
 
 class FeedbackSerialzer(serializers.ModelSerializer):
     # buyer = serializers.StringRelatedField(read_only = True, many=True)
+    feedback_content = serializers.CharField(required=False)
+    feedback_type = serializers.CharField(required=False)
     class Meta:
         model = Feedback
         exclude = ('post_id',)
@@ -220,7 +223,7 @@ class TimelineSerializer(serializers.Serializer):
     shop_name = serializers.CharField(required=False)
     feedback = FeedbackSerialzer(many=True)
     # feedback_id = serializers.ListField(child=serializers.IntegerField())
-    tag_name = TagSerialzer(many=True)
+    tags = TagSerialzer(many=True)
 
 
 
